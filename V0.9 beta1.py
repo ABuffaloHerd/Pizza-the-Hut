@@ -30,10 +30,17 @@ details = detailContainer()
 container = Container()
 
 pizzaDict = {}
-with open("pizza.txt") as f:
-    for line in f:
-        (key, val) = line.split('||') #String is split at the '||' in the file
-        pizzaDict[key] = float(val) #Loads the name as a key, and the price as the value
+
+try:
+    with open("pizza.txt") as f:
+        for line in f:
+            if line.startswith("//"): #If the line starts with //, ignore it
+                continue
+            (key, val) = line.split('||') #String is split at the '||' in the file
+            pizzaDict[key] = float(val) #Loads the name as a key, and the price as the value
+except IOError:
+    print("ERROR! pizza.txt NOT FOUND. PLEASE VERIFY INTEGRITY OF PROGRAM FILES")
+    exit()
 
 
 #Load the names of the pizzas into a list so that the names and values can be accessed as needed
@@ -92,6 +99,7 @@ def confirmOrder():
         print("{} {} {}\nPH: {}". format(details.house, details.street, details.suburb, details.phone))
 
 
+    # Order confirmation
     if not TrueFalse("Please confirm the order and input Y to proceed, or N to cancel, Y/N "):
         printLog(cost, False)
         reset()
